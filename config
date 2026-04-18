@@ -1,7 +1,7 @@
 # !/bin/bash
 
-# Configure les fichiers pour le répertoire
-
+# Configures the files into the repository
+database="dates.csv"
 # set executables
 files=(ajoute calcAge cherche dailyCheck launcher main)
 
@@ -17,9 +17,9 @@ pwd > env
 
 
 # create database if it does not exist
-if [ ! -f "dates.txt" ]; then
-    touch dates.txt
-    echo "#prenom nom_nom jj/mm/aaaa > dates.txt"
+if [ ! -f "$database" ]; then
+    touch dates.csv
+    echo "#Prenom;Nom;jj/mm/aaaa > $database"
 fi
 
 exit 0

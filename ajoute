@@ -1,26 +1,27 @@
 #!/bin/bash
 
-# AJOUTE UNE PERSONNE DANS LE CARNET dates.txt AU FORMAT PRENOM NOM DDN
-# variables prenom, nom, ddn
+# AJOUTE UNE PERSONNE DANS LE CARNET dates.txt AU FORMAT PRENOM;NOM;DDN
+# variables prenom, nom, ddn, destFile
 # nb: une phase de pré-traitement doit avoir lieu pour identifier les variables facilement:
-# tout espace est comblé par un '_'. ex: 'DE LA VILLEMARQUE' est soumis en tant que 'DE_LA_VILLEMARQUE'
-# Ceci devra être pris en compte pour la restitution (tout est traité dans le main)
 
-prenom=$1
-nom=$2
-ddn=$3
-path=$4
-destFile="${path}/dates.txt"
+person=$(echo "$1" | tr '_' ' ')
+path=$2
+db="dates/csv"
+destFile="${path}/$db"
 
-nbLinesBefore=$(wc -l ${destFile} | cut -d ' ' -f 1)
-
-if [[ $# -ne 4 ]]; then
+if [[ "$#" -ne "2" ]]; then # PARAMETERS
+	echo "Usage : $0 prenom;nom;ddn path"
 	exit 1
-else 
-	pers="${prenom} ${nom} ${ddn}"
+else
+	nbLinesBefore=$(wc -l ${destFile} | cut -d ' ' -f 1)
+	isAlreadyInDB=$(grep -i "$person" "$destFile" | wc -l)
 
-	echo ${pers} >> ${destFile}
+	if [[ "$isAlreadyInDB" -eq "1" ]]; then
+		echo "Cette personne est déjà répertoriée dans la base de données"
+		exit 1
+	fi
 
+	echo ${person} >> ${destFile}
 	nbLinesAfter=$(wc -l ${destFile} | cut -d ' ' -f 1)
 	
 	# vérification que la ligne a bien été ajoutée dans la BDD

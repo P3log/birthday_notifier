@@ -1,23 +1,37 @@
 #!/bin/bash
 
-#RECHERCHE SI UN NOM OU BIEN UN PRENOM SONT PRESENTS DANS LA LISTE 
-# $1: type de recherche: {selectPrenom, selectNom, selectAll}
+# RECHERCHE SI UN NOM, UN PRENOM OU BIEN UNE DATE SONT PRESENTS DANS LA LISTE ET L'AFFICHE 
+# EN PRETTY FORMAT "NOM PRENOM DDN"
+# $1: type de recherche: {selectPrenom, selectNom, selectAll, dailyCheck}
 # $2: le paramètre à rechercher
 # $3: le chemin absolu où se trouve le fichier
-# format de la bdd : prenom nom ddn
+# format de la bdd : prenom;nom;ddn
 
 mode=${1}
 toSeek=${2}
-path=$3
+path=${3}
+db="dates.csv"
 
 if [[ "${mode}" == "selectPrenom" ]]; then
-	grep -Ei "^${toSeek}" ${path}/dates.txt
+	research=$(grep -Ei "^${toSeek}" ${path}/$db | tr ';' ' ')
 
 elif [[ "${mode}" == "selectNom" ]]; then
-	grep -Ei "^.+ ${toSeek}" ${path}/dates.txt
+	research=$(grep -Ei "^.+;.+${toSeek}" ${path}/$db | tr ';' ' ')
 
 elif [[ "${mode}" == "selectAll" ]]; then
-	grep -i "${toSeek}" ${path}/dates.txt
+	research=$(grep -i "${toSeek}" ${path}/$db | tr ';' ' ')
+	
+elif [[ "${mode}" == "dailyCheck" ]]; then
+	research=$(grep -i "${toSeek}" ${path}/$db | tr ';' ' ')
+fi
+
+
+if [[ -z "${research}" ]] && [[ "$mode" == "dailyCheck" ]]; then
+	: # display nothing
+elif [[ -z "${research}" ]]; then
+	echo "Pas de résultats trouvés pour $toSeek"
+else
+	echo "$research"
 fi
 
 exit

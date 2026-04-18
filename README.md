@@ -62,7 +62,7 @@ Le script va paramétrer l'environnement de base et créer la base de données
 
 ### 4 - Lancement
 - Ouvrir un terminal
-- Exécuter le fichier *main*:
+- Exécuter le fichier *candleFinder*:
 ```bash
 ./main
 ```
@@ -101,19 +101,18 @@ Il est possible d'ajouter des individus à la base de données en suivant la pro
 Si l'ajout vous paraît trop fastidieux sous cet angle, il est également possible de remplir la base de données manuellement.
 Veiller scrupuleusement à respecter le format décrit ci-dessous:
 - Une personne par ligne
-- format <Prénom> \<Nom>\<Date de naissance>
-- Un seul espace entre les 3 paramètres décrits ci-dessus
-- S'il y a des espaces au sein d'un nom ou bien d'un prénom, compléter ces espaces par le caractère '_'.
+- format <Prénom>;\<Nom>;\<Date de naissance>
 - Le format de la date de naissance doit être jj/mm/aaaa.
 - Aucun champ ne doit être vide
+- L'utilisateur reste libre de choisir la casse au sein de sa BDD.
 
 **ex:**<br/>
 ```
-Jean DE_LA_FONTAINE 8/07/1621
+Jean;DE LA FONTAINE;8/07/1621
 ```
 ### 6 - Suppression
 
-Il n'existe pas à ce jour de fonction de suppression de personne de la base de données. Pour ce faire, ouvrir le fichier *dates.txt* et supprimer manuellement l'intégralité de la ligne où se trouve l'individu.
+Il n'existe pas à ce jour de fonction de suppression de personne de la base de données. Pour ce faire, ouvrir le fichier *dates.csv* et supprimer manuellement l'intégralité de la ligne où se trouve l'individu.
 - Ne pas laisser de lignes vides au sein de la base de données
 - Si la dernière ligne est effacée, s'assurer de l'existence d'un renvoi de ligne après la dernière personne référencée.
 
@@ -184,14 +183,16 @@ Illustration:
 ```
 # m h        user	command
 05 11 * * * toto	/home/toto/launcher /home/toto/
+@reboot toto /bin/sh -c 'sleep 120 && /home/toto/launcher /home/toto </dev/null'
 ```
 *Script cron qui lance l'application **CandleFinder** quotidiennement à 11h05*.
+*Script cron qui lance l'application **CandleFinder** quotidiennement à chaque allumage/redémarrage du PC après un délai de 2 minutes*
 
 nb: il est possible de paramétrer le cron différemment bien entendu, plus d'informations se trouvent sur le net à ce sujet!
 
-Une fois ceci paramétré, le script est prêt à être lancé quotidiennement!
+Une fois ceci paramétré, le script est prêt à être lancé quotidiennement.
 
-Ne pas hésiter à faire quelques tests en amont, car une erreur de chemin est vite arrivée ou bien des soucis de configuration peuvent obstruer le chemin le temps d'être résolus.
+Ne pas hésiter à faire quelques tests en amont car une erreur de chemin est vite arrivée ou bien des soucis de configuration peuvent obstruer le chemin le temps d'être résolus.
 
 Petit conseil d'usage: penser à paramétrer les rappels à une heure où la machine est allumée...
 
